@@ -1,0 +1,27 @@
+{
+  "name": "fis-3",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "body-parser": "~1.16.0",
+    "body-parser-xml": "^1.1.0",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.0",
+    "express": "~4.14.1",
+    "express-xml-bodyparser": "^0.3.0",
+    "jade": "~1.11.0",
+    "js2xmlparser": "^3.0.0",
+    "jsontoxml": "0.0.11",
+    "morgan": "~1.7.0",
+    "request": "^2.81.0",
+    "serve-favicon": "~2.3.2",
+    "xml-parser": "^1.2.1",
+    "xml-writer": "^1.7.0",
+    "xml2js": "^0.4.17",
+    "xmlbuilder": "^8.2.2",
+    "xmldom": "^0.1.27"
+  }
+}

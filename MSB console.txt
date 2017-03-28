@@ -1,0 +1,84 @@
+"C:\Program Files (x86)\JetBrains\WebStorm 2016.3.3\bin\runnerw.exe" "C:\Program Files\nodejs\node.exe" "G:\STUDY COURSES TUT\Factory information system\assignment\3\FIS-3\MSB.js"
+Server running at http://localhost:5000/
+ack-HEARTBEAT from MA
+<?xml version="1.0" encoding="UTF-8"?>
+<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/"><soap-env:Header><IPC2501MsgInfo:MessageInfo xmlns:IPC2501MsgInfo="http://webstds.ipc.org/2501/MessageInfo.xsd" sender="SimCNV8" destination="MSB" dateTime="2017-03-25T14:33:14.996Z" messageSchema="http://webstds.ipc.org/2541/EquipmentChangeState.xsd" messageId="SimCNV8|2017-03-25T14:33:14.996Z">
+POST /notifs 200 52.376 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<IPC2541EqState:Envelope xmlns:IPC2541EqState="http://wbstds.ipc.org/2541/EquipmentState.xsd" dateTime="2017-03-25T14:33:14.996Z" currentState="Z2" previousState="Z1" eventID="Z2_Changed">
+POST /notifs 200 1.602 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/"><soap-env:Header><IPC2501MsgInfo:MessageInfo xmlns:IPC2501MsgInfo="http://webstds.ipc.org/2501/MessageInfo.xsd" sender="SimCNV8" destination="MSB" dateTime="2017-03-25T14:33:19.695Z" messageSchema="http://webstds.ipc.org/2541/EquipmentChangeState.xsd" messageId="SimCNV8|2017-03-25T14:33:19.695Z">
+POST /notifs 200 1.406 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<IPC2541EqState:Envelope xmlns:IPC2541EqState="http://wbstds.ipc.org/2541/EquipmentState.xsd" dateTime="2017-03-25T14:33:19.695Z" currentState="Z3" previousState="Z2" eventID="Z3_Changed">
+POST /notifs 200 3.056 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/"><soap-env:Header><IPC2501MsgInfo:MessageInfo xmlns:IPC2501MsgInfo="http://webstds.ipc.org/2501/MessageInfo.xsd" sender="SimCNV8" destination="MSB" dateTime="2017-03-25T14:33:23.175Z" messageSchema="http://webstds.ipc.org/2541/EquipmentChangeState.xsd" messageId="SimCNV8|2017-03-25T14:33:23.175Z">
+POST /notifs 200 0.495 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<IPC2541EqState:Envelope xmlns:IPC2541EqState="http://wbstds.ipc.org/2541/EquipmentState.xsd" dateTime="2017-03-25T14:33:23.175Z" currentState="Z5" previousState="Z3" eventID="Z5_Changed">
+POST /notifs 200 0.975 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<EquipmentHeartbeat dateTime="2017-03-25T14:33:35.999Z" interval="30">
+POST /heartbeat 200 0.721 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/"><soap-env:Header><IPC2501MsgInfo:MessageInfo xmlns:IPC2501MsgInfo="http://webstds.ipc.org/2501/MessageInfo.xsd" sender="SimCNV8" destination="MSB" dateTime="2017-03-25T14:33:41.950Z" messageSchema="http://webstds.ipc.org/2541/EquipmentChangeState.xsd" messageId="SimCNV8|2017-03-25T14:33:41.950Z">
+POST /notifs 200 2.315 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<IPC2541EqState:Envelope xmlns:IPC2541EqState="http://wbstds.ipc.org/2541/EquipmentState.xsd" dateTime="2017-03-25T14:33:41.950Z" currentState="Z2" previousState="Z1" eventID="Z2_Changed">
+POST /notifs 200 1.340 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/"><soap-env:Header><IPC2501MsgInfo:MessageInfo xmlns:IPC2501MsgInfo="http://webstds.ipc.org/2501/MessageInfo.xsd" sender="SimCNV8" destination="MSB" dateTime="2017-03-25T14:33:48.227Z" messageSchema="http://webstds.ipc.org/2541/EquipmentChangeState.xsd" messageId="SimCNV8|2017-03-25T14:33:48.227Z">
+POST /notifs 200 0.935 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<IPC2541EqState:Envelope xmlns:IPC2541EqState="http://wbstds.ipc.org/2541/EquipmentState.xsd" dateTime="2017-03-25T14:33:48.227Z" currentState="Z3" previousState="Z2" eventID="Z3_Changed">
+POST /notifs 200 0.667 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<IPC2541EqState:Envelope xmlns:IPC2541EqState="http://wbstds.ipc.org/2541/EquipmentState.xsd" dateTime="2017-03-25T14:33:56.875Z" currentState="processing" previousState="idle" eventID="DrawStartExecution">
+POST /notifs 200 0.596 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/"><soap-env:Header><IPC2501MsgInfo:MessageInfo xmlns:IPC2501MsgInfo="http://webstds.ipc.org/2501/MessageInfo.xsd" sender="SimROB8" destination="MSB" dateTime="2017-03-25T14:33:56.875Z" messageSchema="http://webstds.ipc.org/2541/EquipmentChangeState.xsd" messageId="SimROB8|2017-03-25T14:33:56.875Z">
+POST /notifs 200 5.891 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/"><soap-env:Header><IPC2501MsgInfo:MessageInfo xmlns:IPC2501MsgInfo="http://webstds.ipc.org/2501/MessageInfo.xsd" sender="SimROB8" destination="MSB" dateTime="2017-03-25T14:34:00.879Z" messageSchema="http://webstds.ipc.org/2541/EquipmentChangeState.xsd" messageId="SimROB8|2017-03-25T14:34:00.879Z">
+POST /notifs 200 2.496 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<IPC2541EqState:Envelope xmlns:IPC2541EqState="http://wbstds.ipc.org/2541/EquipmentState.xsd" dateTime="2017-03-25T14:34:00.879Z" currentState="idle" previousState="processing" eventID="DrawEndExecution">
+POST /notifs 200 3.125 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/"><soap-env:Header><IPC2501MsgInfo:MessageInfo xmlns:IPC2501MsgInfo="http://webstds.ipc.org/2501/MessageInfo.xsd" sender="SimROB8" destination="MSB" dateTime="2017-03-25T14:34:05.536Z" messageSchema="http://webstds.ipc.org/2541/EquipmentChangeState.xsd" messageId="SimROB8|2017-03-25T14:34:05.536Z">
+POST /notifs 200 1.110 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<IPC2541EqState:Envelope xmlns:IPC2541EqState="http://wbstds.ipc.org/2541/EquipmentState.xsd" dateTime="2017-03-25T14:34:05.536Z" currentState="processing" previousState="idle" eventID="DrawStartExecution">
+POST /notifs 200 0.845 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<EquipmentHeartbeat dateTime="2017-03-25T14:34:06.001Z" interval="30">
+POST /heartbeat 200 1.351 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/"><soap-env:Header><IPC2501MsgInfo:MessageInfo xmlns:IPC2501MsgInfo="http://webstds.ipc.org/2501/MessageInfo.xsd" sender="SimROB8" destination="MSB" dateTime="2017-03-25T14:34:09.536Z" messageSchema="http://webstds.ipc.org/2541/EquipmentChangeState.xsd" messageId="SimROB8|2017-03-25T14:34:09.536Z">
+POST /notifs 200 0.671 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<IPC2541EqState:Envelope xmlns:IPC2541EqState="http://wbstds.ipc.org/2541/EquipmentState.xsd" dateTime="2017-03-25T14:34:09.536Z" currentState="idle" previousState="processing" eventID="DrawEndExecution">
+POST /notifs 200 0.487 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/"><soap-env:Header><IPC2501MsgInfo:MessageInfo xmlns:IPC2501MsgInfo="http://webstds.ipc.org/2501/MessageInfo.xsd" sender="SimROB8" destination="MSB" dateTime="2017-03-25T14:34:11.761Z" messageSchema="http://webstds.ipc.org/2541/EquipmentChangeState.xsd" messageId="SimROB8|2017-03-25T14:34:11.761Z">
+POST /notifs 200 0.592 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<IPC2541EqState:Envelope xmlns:IPC2541EqState="http://wbstds.ipc.org/2541/EquipmentState.xsd" dateTime="2017-03-25T14:34:11.761Z" currentState="processing" previousState="idle" eventID="DrawStartExecution">
+POST /notifs 200 0.626 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/"><soap-env:Header><IPC2501MsgInfo:MessageInfo xmlns:IPC2501MsgInfo="http://webstds.ipc.org/2501/MessageInfo.xsd" sender="SimROB8" destination="MSB" dateTime="2017-03-25T14:34:15.766Z" messageSchema="http://webstds.ipc.org/2541/EquipmentChangeState.xsd" messageId="SimROB8|2017-03-25T14:34:15.766Z">
+POST /notifs 200 0.778 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<IPC2541EqState:Envelope xmlns:IPC2541EqState="http://wbstds.ipc.org/2541/EquipmentState.xsd" dateTime="2017-03-25T14:34:15.766Z" currentState="idle" previousState="processing" eventID="DrawEndExecution">
+POST /notifs 200 0.613 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/"><soap-env:Header><IPC2501MsgInfo:MessageInfo xmlns:IPC2501MsgInfo="http://webstds.ipc.org/2501/MessageInfo.xsd" sender="SimCNV8" destination="MSB" dateTime="2017-03-25T14:34:20.948Z" messageSchema="http://webstds.ipc.org/2541/EquipmentChangeState.xsd" messageId="SimCNV8|2017-03-25T14:34:20.948Z">
+POST /notifs 200 0.648 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<IPC2541EqState:Envelope xmlns:IPC2541EqState="http://wbstds.ipc.org/2541/EquipmentState.xsd" dateTime="2017-03-25T14:34:20.948Z" currentState="Z5" previousState="Z3" eventID="Z5_Changed">
+POST /notifs 200 0.672 ms - -
+<?xml version="1.0" encoding="UTF-8"?>
+<EquipmentHeartbeat dateTime="2017-03-25T14:34:36.002Z" interval="30">
+POST /heartbeat 200 1.460 ms - -

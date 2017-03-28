@@ -1,0 +1,133 @@
+"C:\Program Files (x86)\JetBrains\WebStorm 2016.3.3\bin\runnerw.exe" "C:\Program Files\nodejs\node.exe" "G:\STUDY COURSES TUT\Factory information system\assignment\3\FIS-3\MA.js"
+Server running at http://localhost:4000/
+GET /heartbeat 200 13.333 ms - 21
+{ id: 'Z2_Changed',
+  senderID: 'SimCNV8',
+  lastEmit: 1490452394927,
+  payload: { PalletID: '1490451310347' },
+  clientData: '' }
+POST /notifs 200 56.216 ms - 24
+ack-NOTIFICATION from MSB
+ack-NOTIFICATION from MSB
+{ id: 'Z2_Changed',
+  senderID: 'SimCNV8',
+  lastEmit: 1490452398989,
+  payload: { PalletID: -1 },
+  clientData: '' }
+POST /notifs 200 2.847 ms - 24
+{ id: 'Z3_Changed',
+  senderID: 'SimCNV8',
+  lastEmit: 1490452399695,
+  payload: { PalletID: '1490451310347' },
+  clientData: '' }
+POST /notifs 200 2.687 ms - 24
+ack-NOTIFICATION from MSB
+ack-NOTIFICATION from MSB
+{ id: 'Z3_Changed',
+  senderID: 'SimCNV8',
+  lastEmit: 1490452401869,
+  payload: { PalletID: -1 },
+  clientData: '' }
+POST /notifs 200 1.948 ms - 24
+{ id: 'Z5_Changed',
+  senderID: 'SimCNV8',
+  lastEmit: 1490452403173,
+  payload: { PalletID: '1490451310347' },
+  clientData: '' }
+POST /notifs 200 4.197 ms - 24
+ack-NOTIFICATION from MSB
+ack-NOTIFICATION from MSB
+{ id: 'Z5_Changed',
+  senderID: 'SimCNV8',
+  lastEmit: 1490452407574,
+  payload: { PalletID: -1 },
+  clientData: '' }
+POST /notifs 200 2.366 ms - 24
+ack-HEARTBEAT from MSB
+{ id: 'Z2_Changed',
+  senderID: 'SimCNV8',
+  lastEmit: 1490452421919,
+  payload: { PalletID: '1490451310348' },
+  clientData: '' }
+POST /notifs 200 7.654 ms - 24
+ack-NOTIFICATION from MSB
+ack-NOTIFICATION from MSB
+{ id: 'Z2_Changed',
+  senderID: 'SimCNV8',
+  lastEmit: 1490452427522,
+  payload: { PalletID: -1 },
+  clientData: '' }
+POST /notifs 200 3.846 ms - 24
+{ id: 'Z3_Changed',
+  senderID: 'SimCNV8',
+  lastEmit: 1490452428221,
+  payload: { PalletID: '1490451310348' },
+  clientData: '' }
+POST /notifs 200 4.999 ms - 24
+ack-NOTIFICATION from MSB
+ack-NOTIFICATION from MSB
+{ id: 'DrawStartExecution',
+  senderID: 'SimROB8',
+  lastEmit: 1490452436872,
+  payload: { Recipe: '1' },
+  clientData: '' }
+POST /notifs 200 2.996 ms - 24
+ack-NOTIFICATION from MSB
+ack-NOTIFICATION from MSB
+{ id: 'DrawEndExecution',
+  senderID: 'SimROB8',
+  lastEmit: 1490452440873,
+  payload: { PalletID: 1490451310348, Recipe: '1', Color: 'GREEN' },
+  clientData: '' }
+POST /notifs 200 3.459 ms - 24
+ack-NOTIFICATION from MSB
+ack-NOTIFICATION from MSB
+{ id: 'DrawStartExecution',
+  senderID: 'SimROB8',
+  lastEmit: 1490452445533,
+  payload: { Recipe: '6' },
+  clientData: '' }
+POST /notifs 200 4.143 ms - 24
+ack-NOTIFICATION from MSB
+ack-NOTIFICATION from MSB
+ack-HEARTBEAT from MSB
+{ id: 'DrawEndExecution',
+  senderID: 'SimROB8',
+  lastEmit: 1490452449531,
+  payload: { PalletID: 1490451310348, Recipe: '6', Color: 'BLUE' },
+  clientData: '' }
+POST /notifs 200 5.938 ms - 24
+ack-NOTIFICATION from MSB
+ack-NOTIFICATION from MSB
+{ id: 'DrawStartExecution',
+  senderID: 'SimROB8',
+  lastEmit: 1490452451755,
+  payload: { Recipe: '7' },
+  clientData: '' }
+POST /notifs 200 4.556 ms - 24
+ack-NOTIFICATION from MSB
+ack-NOTIFICATION from MSB
+{ id: 'DrawEndExecution',
+  senderID: 'SimROB8',
+  lastEmit: 1490452455762,
+  payload: { PalletID: 1490451310348, Recipe: '7', Color: 'BLUE' },
+  clientData: '' }
+POST /notifs 200 3.078 ms - 24
+ack-NOTIFICATION from MSB
+ack-NOTIFICATION from MSB
+{ id: 'Z3_Changed',
+  senderID: 'SimCNV8',
+  lastEmit: 1490452459643,
+  payload: { PalletID: -1 },
+  clientData: '' }
+POST /notifs 200 2.167 ms - 24
+{ id: 'Z5_Changed',
+  senderID: 'SimCNV8',
+  lastEmit: 1490452460944,
+  payload: { PalletID: '1490451310348' },
+  clientData: '' }
+POST /notifs 200 1.594 ms - 24
+ack-NOTIFICATION from MSB
+ack-NOTIFICATION from MSB
+ack-HEARTBEAT from MSB
+ack-HEARTBEAT from MSB
