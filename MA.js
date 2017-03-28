@@ -47,7 +47,7 @@ function XMLPost(date, previousState,currentState, event, sender) {
     xw1.endDocument();
     var XMLIPC2501 = xw1.toString();
     //console.log(xw);
-    /*-----------------------
+
     var xw2 = new XMLWriter;
     xw2.startDocument('1.0', 'UTF-8');
     xw2.startElement('IPC2541EqState:Envelope');
@@ -58,20 +58,20 @@ function XMLPost(date, previousState,currentState, event, sender) {
     xw2.writeAttribute('eventID',event);
     xw2.endDocument();
     var XMLIPC2541 = xw2.toString();
-    -------------------------*/
+
     request({
-        url: 'http://localhost:5000/notifs',
+        url: 'http://localhost:5000/notifs/IPC2501',
         method: "POST",
         body: XMLIPC2501,
         headers:{'Content-Type':'text/xml'}
     },function (err, res, body) {console.log(body)});
-    /*
+
      request({
-     url: 'http://localhost:5000/notifs',
-     method: "POST",
-     body: XMLIPC2541,
-     headers:{'Content-Type':'text/xml'}
-     },function (err, res, body) {console.log(body)});*/
+         url: 'http://localhost:5000/notifs/IPC2541',
+         method: "POST",
+         body: XMLIPC2541,
+         headers:{'Content-Type':'text/xml'}
+     },function (err, res, body) {console.log(body)});
 }
 
 function equipmentHeartbeat(){

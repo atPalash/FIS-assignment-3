@@ -20,7 +20,7 @@ app.set('view engine', 'jade');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
-app.use(bodyParser.json());
+app.use(bodyParser.text({type: 'text/xml'}));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -30,12 +30,19 @@ app.get('/', function (req, res) {
     res.end('hi');
 });
 
-app.post('/notifs', function (req, res){
-    var data = req.body;
+app.post('/notifs/IPC2541', function (req, res){
+    global.data = req.body;
     //var sender = data.substring(data.indexOf("sender")+8,data.indexOf("destination")-2);
     console.log(data);
     //console.log(sender);
 });
+
+app.get('/notifs', function (req, res) {
+    res.writeHead(200, {'Content-Type':'text/xml'});
+    res.write(data);
+    res.end();
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
