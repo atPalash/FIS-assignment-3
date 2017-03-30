@@ -41,7 +41,7 @@ app.post('/notifs', function (req, res) {
         url: 'http://localhost:5555/notifs',
         method: "POST",
         body: data,
-        headers:{'Content-Type':'text/xml'}
+        headers:{'Content-Type':'text/plain'}
     },function (err, res, body) {console.log(body)});
 
 });

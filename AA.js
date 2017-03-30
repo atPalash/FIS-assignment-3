@@ -20,7 +20,7 @@ app.set('view engine', 'jade');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
-app.use(bodyParser.text({type: 'text/xml'}));
+app.use(bodyParser.text({type: 'text/plain'}));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -34,6 +34,7 @@ app.post('/notifs', function (req, res){
     var data = req.body;
     var str2 = data.substring(data.search('sender'),data.search('destination'));
     console.log(str2);
+    res.end('ack-NOTIFICATION from AA');
 });
 
 /*-----------------------for GET of XML file (make data above as global)

@@ -93,8 +93,9 @@ function XMLPost(date, previousState,currentState, event, sender) {
         url: 'http://localhost:5000/notifs',
         method: "POST",
         body: mime,
-        headers:{'Content-Type':'text/plain'}
+        headers:{'Content-Type':'text/plain'} // one of the content type for MIME is text/plain
     },function (err, res, body) {console.log(body)});
+
     /*-------------------------------------------for separate calls
      request({
          url: 'http://localhost:5000/notifs/IPC2541',
