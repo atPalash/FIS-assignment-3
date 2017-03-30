@@ -30,18 +30,19 @@ app.get('/', function (req, res) {
     res.end('hi');
 });
 
-app.post('/notifs/IPC2541', function (req, res){
-    global.data = req.body;
-    //var sender = data.substring(data.indexOf("sender")+8,data.indexOf("destination")-2);
-    console.log(data);
-    //console.log(sender);
+app.post('/notifs', function (req, res){
+    var data = req.body;
+    var str2 = data.substring(data.search('sender'),data.search('destination'));
+    console.log(str2);
 });
 
+/*-----------------------for GET of XML file (make data above as global)
 app.get('/notifs', function (req, res) {
     res.writeHead(200, {'Content-Type':'text/xml'});
     res.write(data);
     res.end();
 });
+--------------------------------------------*/
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -21,7 +21,8 @@ app.set('view engine', 'jade');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
-app.use(bodyParser.text({type: 'text/xml'}));
+//app.use(bodyParser.json());
+app.use(bodyParser.text({type: 'text/plain'}));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -31,26 +32,28 @@ app.get('/', function (req, res) {
     res.end('hi');
 });
 
-app.post('/notifs/IPC2501', function (req, res) {
+app.post('/notifs', function (req, res) {
     var data = req.body;
     console.log(data);
-    res.end("ack-NOTIFICATION IPC2501 from MSB");
-});
-
-app.post('/notifs/IPC2541', function (req, res) {
-    var data = req.body;
-    console.log(data);
-    res.end("ack-NOTIFICATION IPC2541 from MSB");
+    res.end("ack-NOTIFICATION from MSB");
 
     request({
-        url: 'http://localhost:5555/notifs/IPC2541',
+        url: 'http://localhost:5555/notifs',
         method: "POST",
         body: data,
         headers:{'Content-Type':'text/xml'}
     },function (err, res, body) {console.log(body)});
+
 });
 
-/*----GET router for testing the XML(make data above as globall)
+/*-----------------------for separate routes for IPC
+app.post('/notifs/IPC2541', function (req, res) {
+    var data = req.body;
+    console.log(data);
+    res.end("ack-NOTIFICATION IPC2541 from MSB");
+});
+---------------------------------------------------*/
+/*----GET router for testing the XML(make data above as global)
  app.get('/notifs', function (req, res) {
      res.writeHead(200, {'Content-Type':'text/xml'});
      res.write(data);

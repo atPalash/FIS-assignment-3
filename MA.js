@@ -7,6 +7,8 @@ var bodyParser = require('body-parser');
 var request = require('request');
 var XMLWriter = require('xml-writer');
 var http = require('http');
+var mimemessage = require('mimemessage');
+
 var index = require('./routes/index');
 var users = require('./routes/users');
 
@@ -59,19 +61,48 @@ function XMLPost(date, previousState,currentState, event, sender) {
     xw2.endDocument();
     var XMLIPC2541 = xw2.toString();
 
-    request({
-        url: 'http://localhost:5000/notifs/IPC2501',
-        method: "POST",
-        body: XMLIPC2501,
-        headers:{'Content-Type':'text/xml'}
-    },function (err, res, body) {console.log(body)});
+    //var XML = XMLIPC2501 + '\n' + XMLIPC2541;
 
+    var msg,plain1Entity, plain2Entity;
+
+    msg = mimemessage.factory({
+        contentType: 'multipart/mixed',
+        body: []
+    });
+    msg.header('Message-ID', '<1234qwerty>');
+
+    plain1Entity = mimemessage.factory({
+        contentType: 'text/xml;charset=utf-8',
+        contentTransferEncoding : 'base64',
+        body: XMLIPC2501
+    });
+
+    plain2Entity = mimemessage.factory({
+        contentType: 'text/xml; charset=utf-8',
+        contentTransferEncoding : 'base64',
+        //contentId:'xxx',
+        body: XMLIPC2541
+    });
+
+    msg.body.push(plain1Entity);
+    msg.body.push(plain2Entity);
+    var mime = msg.toString();
+    console.log(typeof (msg));
+
+    request({
+        url: 'http://localhost:5000/notifs',
+        method: "POST",
+        body: mime,
+        headers:{'Content-Type':'text/plain'}
+    },function (err, res, body) {console.log(body)});
+    /*-------------------------------------------for separate calls
      request({
          url: 'http://localhost:5000/notifs/IPC2541',
          method: "POST",
          body: XMLIPC2541,
          headers:{'Content-Type':'text/xml'}
      },function (err, res, body) {console.log(body)});
+     ---------------------------------------------*/
 }
 
 function equipmentHeartbeat(){
