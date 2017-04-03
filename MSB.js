@@ -27,56 +27,79 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 app.get('/', function (req, res) {
     res.end('hi');
 });
 
+//for receiving events at the Archiver
+var eqStateFlag = false;
+app.get('/changeState', function (req, res) {
+    eqStateFlag = true;
+    res.end("MSB response-sending Data-when Machine makes events");
+});
 app.post('/notifs', function (req, res) {
-    var data = req.body;
-    console.log(data);
+    var dataChangeState = req.body;
     res.end("ack-NOTIFICATION from MSB");
-
-    request({
-        url: 'http://localhost:5555/notifs',
-        method: "POST",
-        body: data,
-        headers:{'Content-Type':'text/plain'}
-    },function (err, res, body) {console.log(body)});
-
+    if(eqStateFlag){
+        eqStateFlag = false;
+        request({
+            url: 'http://localhost:5555/notifs',
+            method: "POST",
+            body: dataChangeState,
+            headers:{'Content-Type':'text/plain'}
+        },function (err, res, body) {
+            if(err){
+                console.log(err);
+            }else{
+                request({
+                        url: 'http://localhost:5555/notifs/acknowledgement',
+                        method: "POST",
+                        body: "equipment change empty soap",
+                        headers:{'Content-Type':'text/plain'}
+                    },function (err, res, body) {
+                        console.log(body)
+                    }
+                );
+                console.log(body);
+            }
+        });
+    }
 });
 
-/*-----------------------for separate routes for IPC
-app.post('/notifs/IPC2541', function (req, res) {
-    var data = req.body;
-    console.log(data);
-    res.end("ack-NOTIFICATION IPC2541 from MSB");
+//for receiving heartbeat at archiver
+var heartbeatflag = false;
+app.get('/heartbeat', function (req, res) {
+    heartbeatflag = true;
+    res.end("MSB response-sending heartbeat periodically");
 });
----------------------------------------------------*/
-/*----GET router for testing the XML(make data above as global)
- app.get('/notifs', function (req, res) {
-     res.writeHead(200, {'Content-Type':'text/xml'});
-     res.write(data);
-     res.end();
- });
-------------------------*/
-
 app.post('/heartbeat', function (req, res) {
-    var data = req.body;
-    console.log(data);
+    var dataHeartbeat = req.body; //global variable defined change it.
+    if(heartbeatflag){
+        heartbeatflag = false;
+        request({
+                url: 'http://localhost:5555/heartbeat',
+                method: "POST",
+                body: dataHeartbeat,
+                headers:{'Content-Type':'text/plain'}
+            },function (err, res, body) {
+                if(err){
+                    console.log(err);
+                }else{
+                    request({
+                        url: 'http://localhost:5555/heartbeat/acknowledgement',
+                        method: "POST",
+                        body: "heartbeat empty soap",
+                        headers:{'Content-Type':'text/plain'}
+                    },function (err, res, body) {
+                        console.log(body)
+                    });
+                    console.log(body)
+                }
+            }
+        );
+    }
     res.end("ack-HEARTBEAT from MSB");
 });
-
-request({
-        url: 'http://localhost:4000/heartbeat',
-        method: "GET"
-    },function (err, res, body) {
-        if(err){
-            console.log(err.code +" "+ err.address +"/"+ err.port);
-        }else{
-            console.log(body);}
-    }
-);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

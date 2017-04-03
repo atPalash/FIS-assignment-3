@@ -8,6 +8,8 @@ var request = require('request');
 var XMLWriter = require('xml-writer');
 var http = require('http');
 var mimemessage = require('mimemessage');
+var validator = require('xsd-schema-validator');
+var fs = require('fs');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -29,47 +31,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', function (req, res) {
-    res.end('hi');
-});
-
-function XMLPost(date, previousState,currentState, event, sender) {
-    var xw1 = new XMLWriter;
-    xw1.startDocument('1.0', 'UTF-8');
-    xw1.startElement('soap-env:Envelope');
-    xw1.writeAttribute('xmlns:soap-env',"http://schemas.xmlsoap.org/soap/envelope/");
-    xw1.startElement('soap-env:Header');
-    xw1.startElement('IPC2501MsgInfo:MessageInfo');
-    xw1.writeAttribute('xmlns:IPC2501MsgInfo',"http://webstds.ipc.org/2501/MessageInfo.xsd");
-    xw1.writeAttribute('sender',sender);
-    xw1.writeAttribute('destination',"MSB");
-    xw1.writeAttribute('dateTime',date);
-    xw1.writeAttribute('messageSchema',"http://webstds.ipc.org/2541/EquipmentChangeState.xsd");
-    xw1.writeAttribute('messageId',sender+'|'+date);
-    xw1.endDocument();
-    var XMLIPC2501 = xw1.toString();
-    //console.log(xw);
-
-    var xw2 = new XMLWriter;
-    xw2.startDocument('1.0', 'UTF-8');
-    xw2.startElement('IPC2541EqState:Envelope');
-    xw2.writeAttribute('xmlns:IPC2541EqState','http://wbstds.ipc.org/2541/EquipmentChangeState.xsd');
-    xw2.writeAttribute('dateTime', date);
-    xw2.writeAttribute('currentState', currentState);
-    xw2.writeAttribute('previousState', previousState);
-    xw2.writeAttribute('eventID',event);
-    xw2.endDocument();
-    var XMLIPC2541 = xw2.toString();
-
-    //var XML = XMLIPC2501 + '\n' + XMLIPC2541;
-
+function mimeMessageMaker(XMLIPC2501, XMLIPC2541) {
     var msg,plain1Entity, plain2Entity;
 
     msg = mimemessage.factory({
         contentType: 'multipart/mixed',
         body: []
     });
-    msg.header('Message-ID', '<1234qwerty>');
+    msg.header('Message-ID', '<IPC2501-2541>');
 
     plain1Entity = mimemessage.factory({
         contentType: 'text/xml;charset=utf-8',
@@ -80,52 +49,151 @@ function XMLPost(date, previousState,currentState, event, sender) {
     plain2Entity = mimemessage.factory({
         contentType: 'text/xml; charset=utf-8',
         contentTransferEncoding : 'base64',
-        //contentId:'xxx',
         body: XMLIPC2541
     });
 
     msg.body.push(plain1Entity);
     msg.body.push(plain2Entity);
     var mime = msg.toString();
-    console.log(typeof (msg));
+    return mime;
+}
 
-    request({
-        url: 'http://localhost:5000/notifs',
-        method: "POST",
-        body: mime,
-        headers:{'Content-Type':'text/plain'} // one of the content type for MIME is text/plain
-    },function (err, res, body) {console.log(body)});
+function equipmentChangeState(date, previousState,currentState, event, sender) {
+    var XMLIPC2501stat = false;
+    var XMlIPC2541stat = false;
+    var valXML1 = '<?xml version="1.0" encoding="UTF-8"?>' +
+                    '<MessageInfo dateTime="'+date+'" sender="'+sender+'" destination="MSB-localhost/5000"  messageSchema="http://webstds.ipc.org/2541/EquipmentChangeState.xsd" messageId="'+sender+'|'+date+'"/>';
 
-    /*-------------------------------------------for separate calls
-     request({
-         url: 'http://localhost:5000/notifs/IPC2541',
-         method: "POST",
-         body: XMLIPC2541,
-         headers:{'Content-Type':'text/xml'}
-     },function (err, res, body) {console.log(body)});
-     ---------------------------------------------*/
+    var xsdIPC2501 = "IPC2501.xsd";
+    try {
+        fs.accessSync(xsdIPC2501, fs.F_OK);
+    } catch (e) {
+        console.log('XSD file ' + xsdIPC2501 + ' is not accessible. Exiting the program');
+        console.log(e);
+        process.exit(1);
+    }
+
+    validator.validateXML(valXML1, xsdIPC2501, function(err, result) {
+        if (err) {
+            console.log('Error was found during validation of file ' + valXML1 + ':');
+            process.exit(1);
+        } else
+            console.log('valXML1 ' + xsdIPC2501 + ' is valid: ' + result.valid); // true
+            XMLIPC2501stat = true;
+            var valXML2 = '<?xml version="1.0" encoding="UTF-8"?>' +
+                '<EquipmentChangeState dateTime="'+date+'" currentState="'+currentState+'" previousState="'+previousState+'" eventId="'+event+'"/>';
+            var xsdIPC2541Change = "IPC2541ChangeState.xsd";
+            try {
+                fs.accessSync(xsdIPC2541Change, fs.F_OK);
+            } catch (e) {
+                console.log('XSD file ' + xsdIPC2541Change + ' is not accessible. Exiting the program');
+                console.log(e);
+                process.exit(1);
+            }
+
+            validator.validateXML(valXML2, xsdIPC2541Change, function(err, result) {
+                if (err) {
+                    console.log('Error was found during validation of file ' + xsdIPC2541Change + ':');
+                    process.exit(1);
+                } else{
+                    console.log('valXML2 ' + xsdIPC2541Change + ' is valid: ' + result.valid); // true
+                    XMlIPC2541stat = true;
+                    if((XMLIPC2501stat)&&(XMlIPC2541stat)){
+                        var XMLIPC2501 = '<?xml version="1.0" encoding="UTF-8"?>' +
+                            '<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">' +
+                            '<soap-env:Header><IPC2501MsgInfo:MessageInfo xmlns:IPC2501MsgInfo="http://webstds.ipc.org/2501/MessageInfo.xsd" sender="'+sender+
+                            '" destination="MSB" dateTime="'+date+'" messageSchema="http://webstds.ipc.org/2541/EquipmentChangeState.xsd" messageId="'+sender+'|'+date+'"/>';
+                        //console.log(XMLIPC2501);
+                        var XMLIPC2541 = '<?xml version="1.0" encoding="UTF-8"?>' +
+                            '<IPC2541EqState:Envelope xmlns:IPC2541EqState="http://wbstds.ipc.org/2541/EquipmentState.xsd" dateTime='+date+' currentState='+currentState+' previousState='+previousState+' eventId='+event+'/>';
+                        //console.log(XMLIPC2541);
+                        var mime = mimeMessageMaker(XMLIPC2501,XMLIPC2541);
+
+                        request({
+                            url: 'http://localhost:5000/notifs',
+                            method: "POST",
+                            body: mime,
+                            headers:{'Content-Type':'text/plain'} // one of the content type for MIME is text/plain
+                        },function (err, res, body) {console.log(body)});
+                    }else{
+                        console.log("XML-EquipmentChangeState was not validated");
+                    }
+                }
+            });
+        });
 }
 
 function equipmentHeartbeat(){
     setInterval(function(){
         var date = new Date();
         var ISODate = date.toISOString();
-        var xw = new XMLWriter;
-        xw.startDocument('1.0', 'UTF-8');
-        xw.startElement('EquipmentHeartbeat');
-        xw.writeAttribute('dateTime', ISODate);
-        xw.writeAttribute('interval', 30);
-        xw.endDocument();
-        var XMLHeartbeat = xw.toString();
-        request({
-            url: 'http://localhost:5000/heartbeat',
-            method: "POST",
-            body: XMLHeartbeat,
-            headers: {'Content-Type':'text/xml'}
-        },function (err, res, body) {console.log(body)});
-    },30000);
+        var XMLIPC2501stat = false;
+        var XMlIPC2541stat = false;
+        var valXML1 = '<?xml version="1.0" encoding="UTF-8"?>' +
+                        '<MessageInfo dateTime="'+ISODate+'" sender="WS8" destination="MSB-localhost/5000"  messageSchema="http://webstds.ipc.org/2541/EquipmentChangeState.xsd" messageId="WS8|'+ISODate+'"/>';
+        var xsdIPC2501 = "IPC2501.xsd";
+        try {
+            fs.accessSync(xsdIPC2501, fs.F_OK);
+        } catch (e) {
+            console.log('XSD file ' + xsdIPC2501 + ' is not accessible. Exiting the program');
+            console.log(e);
+            process.exit(1);
+        }
+        validator.validateXML(valXML1, xsdIPC2501, function(err, result) {
+            if (err) {
+                console.log('Error was found during validation of file ' + valXML1 + ':');
+                process.exit(1);
+            } else
+                console.log('valXML1 ' + xsdIPC2501 + ' is valid: ' + result.valid); // true
+                XMLIPC2501stat = true;
+                var valXML2 = '<?xml version="1.0" encoding="UTF-8"?><EquipmentHeartbeat dateTime="'+ISODate+'" interval="20"/>';
+                //console.log(valXML2);
+                var xsdHeartbeat = "IPC2541HeartBeat.xsd";
+                try {
+                    fs.accessSync(xsdHeartbeat, fs.F_OK);
+                } catch (e) {
+                    console.log('XSD file ' + xsdHeartbeat + ' is not accessible. Exiting the program');
+                    console.log(e);
+                    process.exit(1);
+                }
+
+                validator.validateXML(valXML2, xsdHeartbeat, function(err, result) {
+                    if (err) {
+                        console.log('Error was found during validation of file ' + valXML2 + ':');
+                        console.log(err);
+                        process.exit(1);
+                    } else{
+                        console.log('valXML2 ' + xsdHeartbeat + ' is valid: ' + result.valid); // true
+                        XMlIPC2541stat = true;
+                        if((XMLIPC2501stat)&&(XMlIPC2541stat)){
+                            var XMLIPC2501 = '<?xml version="1.0" encoding="UTF-8"?>' +
+                                '<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">' +
+                                '<soap-env:Header><IPC2501MsgInfo:MessageInfo xmlns:IPC2501MsgInfo="http://webstds.ipc.org/2501/MessageInfo.xsd" sender="WS8"' +
+                                ' destination="MSB" dateTime="'+ISODate+'" messageSchema="http://webstds.ipc.org/2541/EquipmentChangeState.xsd" messageId="WS8|'+ISODate+'"/>';
+                            var XMLIPC2541 = '<?xml version="1.0" encoding="UTF-8"?>' +
+                                '<IPC2541EquipmentHeartbeat xmlns:IPC2541EqHeartbeat="http://wbstds.ipc.org/2541/EquipmentHeartbeat.xsd" dateTime="'+ISODate+'" interval="5000">';
+                            var mime = mimeMessageMaker(XMLIPC2501,XMLIPC2541);
+                            request({
+                                url: 'http://localhost:5000/heartbeat',
+                                method: "POST",
+                                body: mime,
+                                headers:{'Content-Type':'text/plain'} // one of the content type for MIME is text/plain
+                            },function (err, res, body) {console.log(body)});
+                        }else{
+                            console.log("XML-EquipmentHeartbeat was not validated");
+                        }
+                    }
+                });
+            });
+    },20000);
 }
 
+equipmentHeartbeat();
+
+app.get('/', function (req, res) {
+    res.end('hi');
+});
+var zoneFlag = false;
 app.post('/notifs', function (req, res) {
     console.log(req.body);
     var event = req.body.id;
@@ -134,13 +202,13 @@ app.post('/notifs', function (req, res) {
     var ISODate = date.toISOString();
     var prevState = "";
     var currState = "";
+
     switch (event) {
         case "Z2_Changed": {
             if (req.body.payload.PalletID != -1) {
                 prevState = "Z1";
                 currState = "Z2";
-                //dest = "Z2"
-                XMLPost(ISODate, prevState, currState, event, sender);
+                equipmentChangeState(ISODate, prevState, currState, event, sender);
             }
             break;
         }
@@ -148,41 +216,50 @@ app.post('/notifs', function (req, res) {
             if (req.body.payload.PalletID != -1) {
                 prevState = "Z2";
                 currState = "Z3";
-                XMLPost(ISODate, prevState, currState, event,sender);
+                zoneFlag = true;
+                equipmentChangeState(ISODate, prevState, currState, event,sender);
+            }
+            break;
+        }
+        case "Z4_Changed": {
+            if (req.body.payload.PalletID != -1) {
+                prevState = "Z1";
+                currState = "Z4";
+                equipmentChangeState(ISODate, prevState, currState, event,sender);
             }
             break;
         }
         case "Z5_Changed": {
             if (req.body.payload.PalletID != -1) {
-                prevState = "Z3";
-                currState = "Z5";
-                XMLPost(ISODate, prevState, currState, event,sender);
+                if(zoneFlag){
+                    prevState = "Z3";
+                    currState = "Z5";
+                    zoneFlag = false;
+                }else{
+                    prevState = "Z4";
+                    currState = "Z5";
+                }
+                equipmentChangeState(ISODate, prevState, currState, event,sender);
             }
             break;
         }
         case "DrawStartExecution":{
             prevState = "idle";
             currState = "processing";
-            XMLPost(ISODate, prevState, currState, event, sender);
+            equipmentChangeState(ISODate, prevState, currState, event, sender);
             break;
         }
         case "DrawEndExecution":{
-            prevState = "processing:PalletID-"+req.body.payload.PalletID+"; Recipe-"+req.body.payload.Recipe+"; Color-"+req.body.payload.Color;
+            prevState = "processing";          ///:PalletID-"+req.body.payload.PalletID+"; Recipe-"+req.body.payload.Recipe+"; Color-"+req.body.payload.Color;
             currState = "idle";
-            XMLPost(ISODate, prevState, currState, event, sender);
+            equipmentChangeState(ISODate, prevState, currState, event, sender);
             break;
         }
         default:{
             res.end("ERROR");
         }
     }
-    //console.log(event);
     res.send("ack-NOTIFICATION from MA");
-});
-
-app.get('/heartbeat', function (req, res) {
-    equipmentHeartbeat();
-    res.send("ack-HEARTBEAT from MA");
 });
 
 // catch 404 and forward to error handler
@@ -205,6 +282,7 @@ app.use(function(err, req, res, next) {
 
 request.post('http://localhost:3000/RTU/SimCNV8/events/Z2_Changed/notifs',{form:{destUrl:"http://localhost:4000/notifs"}}, function(err,httpResponse,body){});
 request.post('http://localhost:3000/RTU/SimCNV8/events/Z3_Changed/notifs',{form:{destUrl:"http://localhost:4000/notifs"}}, function(err,httpResponse,body){});
+request.post('http://localhost:3000/RTU/SimCNV8/events/Z4_Changed/notifs',{form:{destUrl:"http://localhost:4000/notifs"}}, function(err,httpResponse,body){});
 request.post('http://localhost:3000/RTU/SimCNV8/events/Z5_Changed/notifs',{form:{destUrl:"http://localhost:4000/notifs"}}, function(err,httpResponse,body){});
 request.post('http://localhost:3000/RTU/SimROB8/events/DrawStartExecution/notifs',{form:{destUrl:"http://localhost:4000/notifs"}}, function(err,httpResponse,body){});
 request.post('http://localhost:3000/RTU/SimROB8/events/DrawEndExecution/notifs',{form:{destUrl:"http://localhost:4000/notifs"}}, function(err,httpResponse,body){});

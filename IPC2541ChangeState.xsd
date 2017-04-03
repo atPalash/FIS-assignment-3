@@ -1,0 +1,34 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:element name="EquipmentChangeState">
+    <xsd:complexType>
+      <xsd:attribute name="dateTime" use="required" type="xsd:dateTime"/>
+      <xsd:attribute name="previousState" use="required">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="Z1"/>
+            <xsd:enumeration value="Z2"/>
+            <xsd:enumeration value="Z3"/>
+            <xsd:enumeration value="Z4"/>
+            <xsd:enumeration value="Z5"/>
+            <xsd:enumeration value="idle"/>
+            <xsd:enumeration value="processing"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:attribute>
+      <xsd:attribute name="currentState" use="required">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="Z1"/>
+            <xsd:enumeration value="Z2"/>
+            <xsd:enumeration value="Z3"/>
+            <xsd:enumeration value="Z4"/>
+            <xsd:enumeration value="Z5"/>
+            <xsd:enumeration value="idle"/>
+            <xsd:enumeration value="processing"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:attribute>
+      <xsd:attribute name="eventId" use="required" type="xsd:string"/>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

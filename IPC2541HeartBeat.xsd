@@ -1,0 +1,12 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:element name="EquipmentHeartbeat">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="Extensions" minOccurs="0"/>
+            </xsd:sequence>
+            <xsd:attribute name="dateTime" use="required" type="xsd:dateTime"/>
+            <xsd:attribute name="interval" use="required" type="xsd:nonNegativeInteger"/>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="Extensions"/>
+</xsd:schema>

@@ -4,6 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var request = require('request');
+var mysql = require('mysql');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -12,6 +14,14 @@ var app = express();
 
 var hostname = 'localhost';
 var port = 5555;
+
+var connection = mysql.createConnection({
+    host     : 'localhost',
+    port     : 3306, //Port number to connect to for the DB.
+    user     : 'root', //!!! NB !!! The user name you have assigned to work with the database.
+    password : '123456', //!!! NB !!! The password you have assigned
+    database : 'camx' //!!! NB !!! The database you would like to connect.
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -25,25 +35,95 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+var equipmentStatus = false;
+
+function resetStatus() {
+    equipmentStatus = true;
+}
+
+function getStatus() {
+    setInterval(function () {
+        if(equipmentStatus){
+            console.log("Equipment Running");
+            equipmentStatus =false;
+        }else {
+            console.log("Equipment Stopped");
+        }
+    },25000);
+}
+
+getStatus();
 
 app.get('/', function (req, res) {
     res.end('hi');
 });
 
+
+setInterval(function () {
+    request({
+            url: 'http://localhost:5000/changeState',
+            method: "GET"
+        },function (err, res, body) {
+            if(err){
+                console.log(err.code +" "+ err.address +"/"+ err.port);
+            }else{
+                console.log(body);}
+        }
+    );
+},5000);
+
+setInterval(function(){
+    request({
+            url: 'http://localhost:5000/heartbeat',
+            method: "GET"
+        },function (err, res, body) {
+            if(err){
+                console.log(err.code +" "+ err.address +"/"+ err.port);
+            }else{
+                console.log(body);
+            }
+        }
+    );
+},10000);
+
 app.post('/notifs', function (req, res){
     var data = req.body;
-    var str2 = data.substring(data.search('sender'),data.search('destination'));
-    console.log(str2);
+    var sender = data.substring(data.search('sender')+8,data.search('destination')-2);
+    var destination  = data.substring(data.search('destination')+13, data.search('dateTime')-2);
+    var dateTime  = data.substring(data.search('dateTime')+10, data.search('messageSchema')-2);
+    var messageSchema  = data.substring(data.search('messageSchema')+15, data.search('messageId')-2);
+    var messageId  = data.substring(data.search('messageId')+43,data.search('messageId')+11 );
+    var currentState  = data.substring(data.search('currentState')+13, data.search('previousState')-1);
+    var previousState  = data.substring(data.search('previousState')+14, data.search('eventId')-1);
+    var eventID  = data.substring(data.search('eventId')+18, data.search('eventId')+8);
+    console.log(data);
+    connection.query('insert into camx_info (sender,destination,datetime,messageSchema,messageId,currentState,previousState,eventID) values ("' + sender + '", "' + destination + '", "' +
+        dateTime + '", "' + messageSchema + '", "'
+        + messageId + '",' + ' "' + currentState + '", "' +
+        previousState + '", "' + eventID + '")',function (err, result) {
+        if (err) {
+            console.error(err);
+        }
+        else {
+            console.log('Database Updated');
+        }
+    });
     res.end('ack-NOTIFICATION from AA');
 });
 
-/*-----------------------for GET of XML file (make data above as global)
-app.get('/notifs', function (req, res) {
-    res.writeHead(200, {'Content-Type':'text/xml'});
-    res.write(data);
-    res.end();
+app.post('/notifs/acknowledgement', function (req){
+    console.log(req.body);
 });
---------------------------------------------*/
+
+app.post('/heartbeat', function (req, res){
+    resetStatus();
+    console.log(req.body);
+    res.end('ack-NOTIFICATION from AA');
+});
+
+app.post('/heartbeat/acknowledgement', function (req){
+    console.log(req.body);
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

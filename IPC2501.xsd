@@ -1,0 +1,13 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<xsd:schema xmlns:xsd = "http://www.w3.org/2001/XMLSchema"
+            elementFormDefault = "qualified">
+    <xsd:element name = "MessageInfo">
+        <xsd:complexType>
+            <xsd:attribute name = "dateTime" use = "required" type = "xsd:dateTime"/>
+            <xsd:attribute name = "sender" use = "required" type = "xsd:anyURI"/>
+            <xsd:attribute name = "destination" use = "required" type = "xsd:anyURI"/>
+            <xsd:attribute name = "messageId" use = "required" type = "xsd:string"/>
+            <xsd:attribute name = "messageSchema" use = "required" type = "xsd:anyURI"/>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>
