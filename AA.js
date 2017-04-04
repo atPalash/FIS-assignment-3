@@ -15,6 +15,7 @@ var app = express();
 var hostname = 'localhost';
 var port = 5555;
 
+//setting connection to mysql database
 var connection = mysql.createConnection({
     host     : 'localhost',
     port     : 3306, //Port number to connect to for the DB.
@@ -35,12 +36,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//check running status of the equipment
 var equipmentStatus = false;
-
 function resetStatus() {
     equipmentStatus = true;
 }
-
 function getStatus() {
     setInterval(function () {
         if(equipmentStatus){
@@ -58,7 +58,7 @@ app.get('/', function (req, res) {
     res.end('hi');
 });
 
-
+//repeated polling of MSB by AA to search for state change events
 setInterval(function () {
     request({
             url: 'http://localhost:5000/changeState',
@@ -72,6 +72,7 @@ setInterval(function () {
     );
 },5000);
 
+//repeated polling of MSB by AA to receive heartbeat at AA
 setInterval(function(){
     request({
             url: 'http://localhost:5000/heartbeat',
@@ -86,6 +87,7 @@ setInterval(function(){
     );
 },10000);
 
+//event defined by the post body from MSB are received and stored into database
 app.post('/notifs', function (req, res){
     var data = req.body;
     var sender = data.substring(data.search('sender')+8,data.search('destination')-2);
@@ -111,16 +113,19 @@ app.post('/notifs', function (req, res){
     res.end('ack-NOTIFICATION from AA');
 });
 
+//receives empty soap after each event from MSB to indicate close of one event
 app.post('/notifs/acknowledgement', function (req){
     console.log(req.body);
 });
 
+//recceives heartbeat from MSB
 app.post('/heartbeat', function (req, res){
     resetStatus();
     console.log(req.body);
     res.end('ack-NOTIFICATION from AA');
 });
 
+//receives heartbeat empty soap to indicate close of one hertbeat message
 app.post('/heartbeat/acknowledgement', function (req){
     console.log(req.body);
 });

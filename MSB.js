@@ -31,7 +31,7 @@ app.get('/', function (req, res) {
     res.end('hi');
 });
 
-//for receiving events at the Archiver
+//for receiving events at the Archiver, the "eqStateFlag" decides whether to forward events to AA.
 var eqStateFlag = false;
 app.get('/changeState', function (req, res) {
     eqStateFlag = true;
@@ -66,7 +66,7 @@ app.post('/notifs', function (req, res) {
     }
 });
 
-//for receiving heartbeat at archiver
+//for receiving heartbeat at Archiver, the "heartbeatFlag" decides whether to forward heartbeat to AA.
 var heartbeatflag = false;
 app.get('/heartbeat', function (req, res) {
     heartbeatflag = true;

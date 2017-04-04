@@ -59,8 +59,11 @@ function mimeMessageMaker(XMLIPC2501, XMLIPC2541) {
 }
 
 function equipmentChangeState(date, previousState,currentState, event, sender) {
+    //initializing XML validation stat to "false
     var XMLIPC2501stat = false;
     var XMlIPC2541stat = false;
+
+    // getting the primary XML for validation of IPC2501
     var valXML1 = '<?xml version="1.0" encoding="UTF-8"?>' +
                     '<MessageInfo dateTime="'+date+'" sender="'+sender+'" destination="MSB-localhost/5000"  messageSchema="http://webstds.ipc.org/2541/EquipmentChangeState.xsd" messageId="'+sender+'|'+date+'"/>';
 
@@ -79,7 +82,9 @@ function equipmentChangeState(date, previousState,currentState, event, sender) {
             process.exit(1);
         } else
             console.log('valXML1 ' + xsdIPC2501 + ' is valid: ' + result.valid); // true
-            XMLIPC2501stat = true;
+            XMLIPC2501stat = true; //setting validation stat to "true" for IPC2501
+
+            // getting the primary XML for validation of IPC2541
             var valXML2 = '<?xml version="1.0" encoding="UTF-8"?>' +
                 '<EquipmentChangeState dateTime="'+date+'" currentState="'+currentState+'" previousState="'+previousState+'" eventId="'+event+'"/>';
             var xsdIPC2541Change = "IPC2541ChangeState.xsd";
@@ -98,6 +103,8 @@ function equipmentChangeState(date, previousState,currentState, event, sender) {
                 } else{
                     console.log('valXML2 ' + xsdIPC2541Change + ' is valid: ' + result.valid); // true
                     XMlIPC2541stat = true;
+
+                    //checking both validation result and making the final MIME message to be send
                     if((XMLIPC2501stat)&&(XMlIPC2541stat)){
                         var XMLIPC2501 = '<?xml version="1.0" encoding="UTF-8"?>' +
                             '<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">' +
@@ -122,7 +129,7 @@ function equipmentChangeState(date, previousState,currentState, event, sender) {
             });
         });
 }
-
+//this function works similar to "function equipmentChangeState" just has different contents
 function equipmentHeartbeat(){
     setInterval(function(){
         var date = new Date();
@@ -193,7 +200,8 @@ equipmentHeartbeat();
 app.get('/', function (req, res) {
     res.end('hi');
 });
-var zoneFlag = false;
+
+var zoneFlag = false;//setting zoneFlag to check the previous state of pallet in Zone 5
 app.post('/notifs', function (req, res) {
     console.log(req.body);
     var event = req.body.id;
@@ -280,6 +288,7 @@ app.use(function(err, req, res, next) {
     res.render('error');
 });
 
+//subscribing to the events from the SIMULATOR
 request.post('http://localhost:3000/RTU/SimCNV8/events/Z2_Changed/notifs',{form:{destUrl:"http://localhost:4000/notifs"}}, function(err,httpResponse,body){});
 request.post('http://localhost:3000/RTU/SimCNV8/events/Z3_Changed/notifs',{form:{destUrl:"http://localhost:4000/notifs"}}, function(err,httpResponse,body){});
 request.post('http://localhost:3000/RTU/SimCNV8/events/Z4_Changed/notifs',{form:{destUrl:"http://localhost:4000/notifs"}}, function(err,httpResponse,body){});
@@ -287,6 +296,7 @@ request.post('http://localhost:3000/RTU/SimCNV8/events/Z5_Changed/notifs',{form:
 request.post('http://localhost:3000/RTU/SimROB8/events/DrawStartExecution/notifs',{form:{destUrl:"http://localhost:4000/notifs"}}, function(err,httpResponse,body){});
 request.post('http://localhost:3000/RTU/SimROB8/events/DrawEndExecution/notifs',{form:{destUrl:"http://localhost:4000/notifs"}}, function(err,httpResponse,body){});
 
+//server at localhost:4000
 app.listen(port, hostname, function(){
     console.log(`Server running at http://${hostname}:${port}/`);
 });
